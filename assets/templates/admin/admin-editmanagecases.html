@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>AI assisted search for missing persons</title>
+    <!-- Favicon icon -->
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'admin/images/favicon.png' %}">
+    <link rel="stylesheet" href="{% static 'admin/vendor/owl-carousel/css/owl.carousel.min.css' %}">
+    <link rel="stylesheet" href="{% static 'admin/vendor/owl-carousel/css/owl.theme.default.min.css' %}">
+    <link href="{% static 'admin/vendor/jqvmap/css/jqvmap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'admin/css/style.css' %}" rel="stylesheet">
+<style>
+    .card-registration .select-input.form-control[readonly]:not([disabled]) {
+font-size: 1rem;
+line-height: 2.15;
+padding-left: .75em;
+padding-right: .75em;
+}
+.card-registration .select-arrow {
+top: 13px;
+}
+</style>
+
+
+</head>
+
+<body>
+  <script type="text/javascript">
+    function validation() {
+      var child = document.myform.child;
+      var father = document.myform.father;
+      var email = document.myform.email;
+      var emailpattern = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([com\co\.\in])+$/; // to validate email id
+      var phone = document.myform.phone; 
+      var number = /[0-9]/; 
+      var letter = /[a-z]/;
+      var upper = /[A-z]/;
+      var address = document.myform.address;
+      var dob = document.myform.dob; 
+      var eyecolor = document.myform.eyecolor;
+      var haircolor = document.myform.haircolor;
+      var photo = document.myform.photo;
+      var gender = document.myform.gender;
+      
+
+    if (child.value == "") {
+    alert('Please enter the child name')
+    child.focus();
+    return false;
+    }
+    if (father.value == "") {
+    alert('Please enter the father name')
+    father.focus();
+    return false;
+    }
+    if (email.value == "") {
+    alert('Please enter the email')
+    email.focus();
+    return false;
+    }
+    if (!email.value.match(emailpattern)){
+    alert("Invalid email format")
+    email.focus();
+    return false;
+    }
+    if (phone.value.length !=10){
+    alert('Invalid mobile no')
+    phone.focus();
+    return false;
+    }
+    if (phone.value.match(letter)){
+    alert('Invalid mobile no')
+    phone.focus();
+    return false;
+    }
+    if (phone.value.match(upper)){
+    alert('Invalid mobile no')
+    phone.focus();
+    return false;
+    }
+    if (address.value == "") {
+    alert('Please enter the address ')
+    address.focus();
+    return false;
+    }
+    
+    if (dob.value == "") {
+    alert('Please enter the date of brith')
+    dob.focus();
+    return false;
+    }
+    if (eyecolor.value == "") {
+    alert('Please enter the eyecolor')
+    eyecolor.focus();
+    return false;
+    }
+    if (haircolor.value == "") {
+    alert('Please enter the haircolor')
+    haircolor.focus();
+    return false;
+    }
+    if (photo.value == "") {
+    alert('select the photo')
+    photo.focus();
+    return false;
+    }
+    if (gender.value == "") {
+    alert('select the gender')
+    gender.focus();
+    return false;
+    }
+    
+    }
+
+</script>
+    <!--*******************
+        Preloader start
+    ********************-->
+    <div id="preloader">
+        <div class="sk-three-bounce">
+            <div class="sk-child sk-bounce1"></div>
+            <div class="sk-child sk-bounce2"></div>
+            <div class="sk-child sk-bounce3"></div>
+        </div>
+    </div>
+    <!--*******************
+        Preloader end
+    ********************-->
+
+    <script src="{% static 'main/js/sweetalert.min.js' %}"></script>
+{% if messages %}              
+  {% for message in messages %}
+     {% if message.level == DEFAULT_MESSAGE_LEVELS.WARNING %}
+               <script>swal({
+                 title: "Warning!",
+                 text: "{{message}}",
+                 icon: "warning",
+                 button: "OK",
+               });
+             </script>
+          
+           {% elif message.level == DEFAULT_MESSAGE_LEVELS.INFO %}
+               <script>swal({
+                 title: "Info :)",
+                 text: "{{message}}",
+                 icon: "info",
+                 button: "OK",
+               });
+     </script>
+     {% elif message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+     <script>swal({
+       title: "Error :)",
+       text: "{{message}}",
+       icon: "error",
+       button: "OK",
+     });
+     </script>
+     {% elif message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+     <script>swal({
+     title: "Success :)",
+     text: "{{message}}",
+     icon: "success",
+     button: "OK",
+     });
+     </script>
+           {% endif %}              
+         {% endfor %} 
+     {% endif %}
+    <!--**********************************
+        Main wrapper start
+    ***********************************-->
+    <div id="main-wrapper">
+
+        <!--**********************************
+            Nav header start
+        ***********************************-->
+        <div class="nav-header">
+          <a href="index.html" class="brand-logo">
+            <h3 class="logo-abbr" style="color: rgb(123, 255, 0);">AI</h3>
+            <h3 class="brand-title" style="color: rgb(13, 219, 195);"><i>Search Missing&nbsp;Persons.</i></h3>
+        </a>
+
+            <div class="nav-control">
+                <div class="hamburger">
+                    <span class="line"></span><span class="line"></span><span class="line"></span>
+                </div>
+            </div>
+        </div>
+        <!--**********************************
+            Nav header end
+        ***********************************-->
+
+        <!--**********************************
+            Header start
+        ***********************************-->
+        <div class="header">
+            <div class="header-content">
+                <nav class="navbar navbar-expand">
+                    <div class="collapse navbar-collapse justify-content-between">
+                        <div class="header-left">
+                            <div class="search_bar dropdown">
+                                <span class="search_icon p-3 c-pointer" data-toggle="dropdown">
+                                    <i class="mdi mdi-magnify"></i>
+                                </span>
+                                <div class="dropdown-menu p-0 m-0">
+                                    <form>
+                                        <input class="form-control" type="search" placeholder="Search" aria-label="Search">
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <ul class="navbar-nav header-right">
+                            
+                            <li class="nav-item dropdown header-profile">
+                                <a class="nav-link" href="#" role="button" data-toggle="dropdown">
+                                    <i class="mdi mdi-account"></i>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right">
+                                    
+                                    <a href="{% url 'main_policelogin' %}" class="dropdown-item">
+                                        <i class="icon-key"></i>
+                                        <span class="ml-2">Logout </span>
+                                    </a>
+
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+        </div>
+        <!--**********************************
+            Header end ti-comment-alt
+        ***********************************-->
+
+        <!--**********************************
+            Sidebar start
+        ***********************************-->
+        <div class="quixnav">
+            <div class="quixnav-scroll">
+                <ul class="metismenu" id="menu">
+                    
+                <span class="nav-text">&nbsp;&nbsp;&nbsp;<a href="{% url 'admin_dashboard' %}">&nbsp;&nbsp;&nbsp;<i
+                    class="icon icon-single-04"></i>&nbsp; Dashboard</a></span>
+                        
+              
+                   
+                    <li><a class="has-arrow" href="javascript:void()" aria-expanded="false"><i
+                                class="icon icon-app-store"></i><span class="nav-text">Cases Management</span></a>
+                        <ul aria-expanded="false">
+                            <li><a href="{% url 'admin_addnewcase' %}">Add New Case</a></li>
+                            <li><a href="{% url 'admin_managecases' %}">Manage Case</a></li>
+                        </ul>
+                    
+                    <li><a class="has-arrow" href="javascript:void()" aria-expanded="false"><i
+                                class="icon icon-plug"></i><span class="nav-text">Matches Cases</span></a>
+                        <ul aria-expanded="false">
+                          <li><a href="{% url 'admin_find_match' %}">Find Matches</a></li>
+                            <li><a href="{% url 'admin_viewusersubmittedcases' %}">View User Submitted Cases</a></li>
+                        </ul>
+                    </li>
+                    
+                    <li><a class="has-arrow" href="javascript:void()" aria-expanded="false"><i
+                                class="icon icon-world-2"></i><span class="nav-text">Missing Data Analysis</span></a>
+                        <ul aria-expanded="false">
+                            <li><a href="{% url 'admin_casesanalysisgraph' %}">Cases Analysis Graph</a></li>
+
+                        </ul>
+              
+                    <li><a class="has-arrow" href="javascript:void()" aria-expanded="false"><i
+                                class="icon icon-chart-bar-33"></i><span class="nav-text">FeedBack Analysis</span></a>
+                        <ul aria-expanded="false">
+                            <li><a href="{% url 'admin_sentimentgraph' %}">Sentiment Graph</a></li>
+                        </ul>
+                    </li>
+                    
+                    </li>
+                </ul>
+            </div>
+
+
+        </div>
+        <!--**********************************
+            Sidebar end
+        ***********************************-->
+
+        <!--**********************************
+            Content body start
+        ***********************************-->
+        <div class="content-body">
+          <!-- row -->
+          <div class="container-fluid">
+        <section class="h-100 " style="background-color: rgb(255, 101, 70);">
+            <div class="container py-5 h-100">
+              <div class="row d-flex justify-content-center align-items-center h-100">
+                <div class="col">
+                  <div class="card card-registration my-4" >
+                    <!-- style="background-color: rgba(12, 203, 2, 0.507); " -->
+                    <div class="row g-0">
+                      <div class="col-xl-3 d-none d-xl-block">
+                        <!-- <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-registration/img4.webp"
+                          alt="Sample photo" class="img-fluid"
+                          style="border-top-left-radius: .25rem; border-bottom-left-radius: .25rem;" /> -->
+                      </div>
+                      <div class="col-xl-9">
+                        <div class="card-body p-md-5 text-black">
+                          <h3 class="mb-5 text-uppercase"><b><i>Edit Cases</i></b></h3>
+                        <form action="" method="post" enctype="multipart/form-data" name="myform" onsubmit="return validation()">
+                          {% csrf_token %}
+                          <div class="row">
+                            <div class="col-md-6 mb-4">
+                              <div class="form-outline">
+                                <input type="text" id="form3Example1m" name="child" value="{{edit.Child}}" class="form-control form-control-lg" />
+                                <label class="form-label" for="form3Example1m" style="color:black;">Child Name</label>
+                              </div>
+                            </div>
+                            <div class="col-md-6 mb-4">
+                              <div class="form-outline">
+                                <input type="text" id="form3Example1n" name="father" value="{{edit.father}}" class="form-control form-control-lg" />
+                                <label class="form-label" for="form3Example1n" style="color:black;">Father Name</label>
+                              </div>
+                            </div>
+                          </div>
+          
+                          <div class="row">
+                            <div class="col-md-6 mb-4">
+                              <div class="form-outline">
+                                <input type="text" id="form3Example1m1" name="address" value="{{edit.address}}" class="form-control form-control-lg" />
+                                <label class="form-label" for="form3Example1m1" style="color:black;">Address</label>
+                              </div>
+                            </div>
+                            <div class="col-md-6 mb-4">
+                              <div class="form-outline">
+                                <input type="email" id="form3Example1n1" name="email" value="{{edit.email}}" class="form-control form-control-lg" />
+                                <label class="form-label" for="form3Example1n1" style="color:black;">Email Of Parent</label>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-md-6 mb-4">
+                              <div class="form-outline">
+                                <input type="text" id="form3Example1m" name="phone" value="{{edit.phone}}" class="form-control form-control-lg" />
+                                <label class="form-label" for="form3Example1m" style="color:black;">Phone No.</label>
+                              </div>
+                            </div>
+                            <div class="col-md-6 mb-4">
+                              <div class="form-outline">
+                                <input type="file" id="form3Example1n" name="photo" value="" class="form-control form-control-lg" />
+                                <label class="form-label" for="form3Example1n" style="color:black;">Child Photo</label>
+                                <a href="/media/{{edit.photo}}" style="color: black;" target="_blank">{{edit.photo}}</a>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-md-6 mb-4">
+                              <div class="form-outline">
+                                <input type="text" id="form3Example1m" name="eyecolor" value="{{edit.eyecolor}}" class="form-control form-control-lg" />
+                                <label class="form-label" for="form3Example1m" style="color:black;">Eye Colour</label>
+                              </div>
+                            </div>
+                            <div class="col-md-6 mb-4">
+                              <div class="form-outline">
+                                <input type="text" id="form3Example1n" name="haricolor" value="{{edit.haricolor}}" class="form-control form-control-lg" />
+                                <label class="form-label" for="form3Example1n" style="color:black;">Hair Colour</label>
+                              </div>
+                            </div>
+                          </div>
+                          
+                          <div class="d-md-flex justify-content-start align-items-center mb-4 py-2">
+                            <div class="col-md-6 mb-4">
+                            <h6 class="mb-0 me-4 mb-3">Gender : &nbsp;</h6>
+                              {% if edit.gender == "female" %}
+                            <div class="form-check form-check-inline mb-0 me-4">
+                              <input class="form-check-input " type="radio" name="gender"  id="femaleGender"
+                                value="female" checked/>
+                              <label class="form-check-label" for="femaleGender" style="color:black;">Female</label>
+                            </div>
+                            <div class="form-check form-check-inline mb-0 me-4">
+                              <input class="form-check-input" type="radio" name="gender" id="maleGender"
+                                value="male" />
+                              <label class="form-check-label" for="maleGender" style="color:black;">Male</label>
+                            </div>
+                            <div class="form-check form-check-inline mb-0">
+                              <input class="form-check-input" type="radio" name="gender" id="otherGender"
+                                value="other" />
+                              <label class="form-check-label" for="otherGender" style="color:black;">Other</label>
+                            </div>
+                            {% elif edit.gender == "male" %}
+                            <div class="form-check form-check-inline mb-0 me-4">
+                              <input class="form-check-input " type="radio" name="gender"  id="femaleGender"
+                                value="female" />
+                              <label class="form-check-label" for="femaleGender" style="color:black;">Female</label>
+                            </div>
+                            <div class="form-check form-check-inline mb-0 me-4">
+                              <input class="form-check-input" type="radio" name="gender" id="maleGender"
+                                value="male" checked />
+                              <label class="form-check-label" for="maleGender" style="color:black;">Male</label>
+                            </div>
+                            <div class="form-check form-check-inline mb-0">
+                              <input class="form-check-input" type="radio" name="gender" id="otherGender"
+                                value="other" />
+                              <label class="form-check-label" for="otherGender" style="color:black;">Other</label>
+                            </div>
+                            {% elif edit.gender == "other" %}
+                            <div class="form-check form-check-inline mb-0 me-4">
+                              <input class="form-check-input " type="radio" name="gender"  id="femaleGender"
+                                value="female" />
+                              <label class="form-check-label" for="femaleGender" style="color:black;">Female</label>
+                            </div>
+                            <div class="form-check form-check-inline mb-0 me-4">
+                              <input class="form-check-input" type="radio" name="gender" id="maleGender"
+                                value="male"  />
+                              <label class="form-check-label" for="maleGender" style="color:black;">Male</label>
+                            </div>
+                            <div class="form-check form-check-inline mb-0">
+                              <input class="form-check-input" type="radio" name="gender" id="otherGender"
+                                value="other" checked/>
+                              <label class="form-check-label" for="otherGender" style="color:black;">Other</label>
+                            </div>
+                            {% endif %}
+                            </div>
+                            <div class="col-md-6 ">
+                              <div class="form-outline">
+                                <input type="date" id="form3Example1n" name="dob" value="{{edit.dob}}" class="form-control form-control-lg" />
+                                <label class="form-label" for="form3Example1n" style="color:black;">Date Of Birth</label>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="d-flex justify-content-center pt-3">
+                            
+                            <button type="submit" class="btn btn-warning btn-lg ms-2">Update Case</button>
+                          </div>
+                        </form>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+        <!--**********************************
+            Content body end
+        ***********************************-->
+
+
+        <!--**********************************
+            Footer start
+        ***********************************-->
+        <div class="footer">
+            <div class="copyright">
+                <p>Copyright © Designed &amp; Developed by <a href="https://www.codebook.in/" target="_blank">CODEBOOK</a> 2018</p>
+                <p>Distributed by <a href="#" target="_blank">FZINFOTECH</a></p> 
+            </div>
+        </div>
+        <!--**********************************
+            Footer end
+        ***********************************-->
+
+        <!--**********************************
+           Support ticket button start
+        ***********************************-->
+
+        <!--**********************************
+           Support ticket button end
+        ***********************************-->
+
+
+    </div>
+    <!--**********************************
+        Main wrapper end
+    ***********************************-->
+
+    <!--**********************************
+        Scripts
+    ***********************************-->
+    <!-- Required vendors -->
+    <script src="{% static 'admin/vendor/global/global.min.js' %}"></script>
+    <script src="{% static 'admin/js/quixnav-init.js' %}"></script>
+    <script src="{% static 'admin/js/custom.min.js' %}"></script>
+
+
+    <!-- Vectormap -->
+    <script src="{% static 'admin/vendor/raphael/raphael.min.js' %}"></script>
+    <script src="{% static 'admin/vendor/morris/morris.min.js' %}"></script>
+
+
+    <script src="{% static 'admin/vendor/circle-progress/circle-progress.min.js' %}"></script>
+    <script src="{% static 'admin/vendor/chart.js/Chart.bundle.min.js' %}"></script>
+
+    <script src="{% static 'admin/vendor/gaugeJS/dist/gauge.min.js' %}"></script>
+
+    <!--  flot-chart js -->
+    <script src="{% static 'admin/vendor/flot/jquery.flot.js' %}"></script>
+    <script src="{% static 'admin/vendor/flot/jquery.flot.resize.js' %}"></script>
+
+    <!-- Owl Carousel -->
+    <script src="{% static 'admin/vendor/owl-carousel/js/owl.carousel.min.js' %}"></script>
+
+    <!-- Counter Up -->
+    <script src="{% static 'admin/vendor/jqvmap/js/jquery.vmap.min.js' %}"></script>
+    <script src="{% static 'admin/vendor/jqvmap/js/jquery.vmap.usa.js' %}"></script>
+    <script src="{% static 'admin/vendor/jquery.counterup/jquery.counterup.min.js' %}"></script>
+
+
+    <script src="{% static 'admin/js/dashboard/dashboard-1.js' %}"></script>
+
+
+</body>
+
+</html>
